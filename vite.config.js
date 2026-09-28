@@ -1,15 +1,43 @@
-import { copyFileSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
+/**
+ * Resolve the public base URL.
+ *
+ * - Local `npm run build`: "./" (open dist/index.html offline)
+ * - GitHub Pages project URL: "/<repo>/" e.g. /portfolio-v2/
+ * - Custom domain: "/" when public/CNAME exists (add arusha.com.np there later)
+ * - Override anytime with BASE_PATH=/ or BASE_PATH=/portfolio-v2/
+ */
+function normalizeBase(value) {
+  if (!value || value === "./") return "./";
+  let next = value.trim();
+  if (!next.startsWith("/")) next = `/${next}`;
+  if (!next.endsWith("/")) next = `${next}/`;
+  return next;
+}
+
+function resolveBase() {
+  if (process.env.BASE_PATH) return normalizeBase(process.env.BASE_PATH);
+
+  const pages = process.env.GITHUB_PAGES === "true";
+  if (!pages) return "./";
+
+  if (existsSync(join("public", "CNAME")) || existsSync("CNAME")) return "/";
+
+  const repo = process.env.GITHUB_REPOSITORY?.split("/")[1];
+  if (repo) return normalizeBase(`/${repo}/`);
+
+  return "/";
+}
+
 const pages = process.env.GITHUB_PAGES === "true";
-const base = pages ? "/" : "./";
+const base = resolveBase();
 let outDir = "dist";
 
 export default defineConfig({
-  // arusha.com.np is the site root, so Pages assets must be /assets/….
-  // A local build uses relative paths so opening dist/index.html can run it.
   base,
   define: {
     "import.meta.env.BASE_URL": JSON.stringify(base),
@@ -21,7 +49,6 @@ export default defineConfig({
         cssCodeSplit: false,
         assetsInlineLimit: 0,
         rolldownOptions: {
-          // Silence EMPTY_IMPORT_META for IIFE (import.meta is invalid outside ESM).
           transform: {
             define: {
               "import.meta": "{}",
@@ -49,7 +76,6 @@ export default defineConfig({
         order: "post",
         handler(html) {
           if (pages) return html;
-          // A classic script in <head> runs before #root exists, so the page stays blank.
           const src = html.match(/<script[^>]*\ssrc="([^"]+)"[^>]*><\/script>/)?.[1];
           if (!src) return html;
           return html
@@ -100,6 +126,7 @@ export default defineConfig({
 
           writeFileSync(file, html);
         }
+        // SPA deep links on GitHub Pages: missing paths serve 404.html → same app shell.
         copyFileSync(file, join(outDir, "404.html"));
       },
     },

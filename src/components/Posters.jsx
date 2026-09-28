@@ -23,7 +23,8 @@ const posters = {
 function publicUrl(path) {
   const base = import.meta.env.BASE_URL || "./";
   if (base === "./") return `.${path}`;
-  return path;
+  const root = base.endsWith("/") ? base.slice(0, -1) : base;
+  return `${root}${path}`;
 }
 
 export function Poster({ name, orientation = "landscape" }) {

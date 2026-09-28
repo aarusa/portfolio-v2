@@ -41,14 +41,24 @@ function AppRoutes() {
 }
 
 export default function App() {
+  const base = import.meta.env.BASE_URL || "/";
   // Local inlined builds open as file:// or from ./dist — HashRouter is required there.
-  // GitHub Pages / arusha.com.np uses BrowserRouter with clean URLs.
-  const local = import.meta.env.BASE_URL === "./";
-  const Router = local ? HashRouter : BrowserRouter;
+  // GitHub Pages uses BrowserRouter with basename matching Vite's base (/repo/ or /).
+  const local = base === "./";
+
+  if (local) {
+    return (
+      <HashRouter>
+        <AppRoutes />
+      </HashRouter>
+    );
+  }
+
+  const basename = base === "/" ? undefined : base.replace(/\/$/, "");
 
   return (
-    <Router>
+    <BrowserRouter basename={basename}>
       <AppRoutes />
-    </Router>
+    </BrowserRouter>
   );
 }
