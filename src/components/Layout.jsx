@@ -83,21 +83,42 @@ export function Layout() {
       <a className="skip" href="#content">
         Skip to content
       </a>
-      <header className={`nav ${navAway ? "is-away" : ""}`}>
-        <NavLink to="/" className="nav__mark" end>
+      <header className={`nav ${navAway ? "is-away" : ""} ${open ? "is-open" : ""}`}>
+        <NavLink to="/" className="nav__mark" end onClick={() => setOpen(false)}>
           {site.mark}
         </NavLink>
-        <button className="nav__toggle" type="button" aria-expanded={open} onClick={() => setOpen((value) => !value)}>
+        <button
+          className="nav__toggle"
+          type="button"
+          aria-expanded={open}
+          aria-controls="site-menu"
+          onClick={() => setOpen((value) => !value)}
+        >
           {open ? "Close" : "Menu"}
         </button>
-        <nav className={`nav__links ${open ? "is-open" : ""}`} aria-label="Primary">
+        <nav className="nav__links nav__links--desktop" aria-label="Primary">
+          {links.map((link) => (
+            <NavLink key={link.to} to={link.to} end={link.end}>
+              {link.label}
+            </NavLink>
+          ))}
+        </nav>
+      </header>
+
+      <div
+        id="site-menu"
+        className={`nav__sheet ${open ? "is-open" : ""}`}
+        {...(open ? {} : { inert: true, "aria-hidden": true })}
+      >
+        <nav className="nav__sheet-links" aria-label="Primary">
           {links.map((link) => (
             <NavLink key={link.to} to={link.to} end={link.end} onClick={() => setOpen(false)}>
               {link.label}
             </NavLink>
           ))}
         </nav>
-      </header>
+      </div>
+
       <main id="content">
         <div key={location.pathname} className={openingProject ? "route-stage route-stage--case" : "route-stage"}>
           <Outlet />

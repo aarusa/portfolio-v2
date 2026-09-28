@@ -4,6 +4,8 @@ import { Poster } from "../components/Posters";
 import { featuredProjects } from "../data/projects";
 import { pageTitle } from "../data/site";
 
+const MOBILE_QUERY = "(max-width: 860px)";
+
 export function Home() {
   const bandsRef = useRef([]);
   const frameRef = useRef(0);
@@ -15,8 +17,23 @@ export function Home() {
   }, []);
 
   useEffect(() => {
+    const media = window.matchMedia(MOBILE_QUERY);
+
+    function clearTransforms() {
+      bandsRef.current.filter(Boolean).forEach((band) => {
+        band.style.transform = "";
+        band.style.zIndex = "";
+        band.style.pointerEvents = "";
+      });
+    }
+
     function paint() {
       frameRef.current = 0;
+      if (media.matches) {
+        clearTransforms();
+        return;
+      }
+
       const bands = bandsRef.current.filter(Boolean);
       if (!bands.length) return;
 
@@ -47,14 +64,22 @@ export function Home() {
       frameRef.current = window.requestAnimationFrame(paint);
     }
 
+    function onChange() {
+      clearTransforms();
+      paint();
+    }
+
     paint();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
+    media.addEventListener("change", onChange);
 
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
+      media.removeEventListener("change", onChange);
       if (frameRef.current) window.cancelAnimationFrame(frameRef.current);
+      clearTransforms();
     };
   }, []);
 
