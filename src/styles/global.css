@@ -2399,6 +2399,15 @@ html.is-clone .dock {
 }
 
 @media (max-width: 860px) {
+  :root {
+    --pad: clamp(1rem, 4.5vw, 1.35rem);
+    --nav: 4rem;
+    --text: 1rem;
+    --text-sm: 0.92rem;
+    --display-lg: clamp(2.1rem, 11vw, 3rem);
+    --display-md: clamp(1.7rem, 8vw, 2.4rem);
+  }
+
   .poster,
   .poster--pup,
   .poster--yam,
@@ -2430,12 +2439,25 @@ html.is-clone .dock {
     justify-self: stretch;
   }
 
-  .booking__fields {
+  .booking__fields,
+  .widget__split,
+  .need-grid,
+  .meals,
+  .proj-row {
     grid-template-columns: 1fr;
+  }
+
+  .nav {
+    padding: 0.75rem var(--pad);
+    min-height: var(--nav);
   }
 
   .nav__toggle {
     display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0 0.15rem;
+    font-size: 0.95rem;
   }
 
   .nav__links {
@@ -2446,8 +2468,9 @@ html.is-clone .dock {
     z-index: 25;
     flex-direction: column;
     justify-content: flex-end;
-    padding: var(--pad) var(--pad) 6rem;
-    gap: 0.2rem;
+    padding: var(--pad);
+    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+    gap: 0.15rem;
   }
 
   .nav__links.is-open {
@@ -2458,16 +2481,16 @@ html.is-clone .dock {
   .nav__links a {
     font-family: var(--display);
     font-weight: 800;
-    font-size: clamp(3rem, 14vw, 5rem);
+    font-size: clamp(2.6rem, 12vw, 4.4rem);
     letter-spacing: -0.06em;
     text-transform: uppercase;
-    line-height: 0.9;
+    line-height: 0.92;
+    padding: 0.15rem 0;
   }
 
   .band__foot,
   .home__else,
   .lab__list,
-  .meals,
   .pantry,
   .write-index__top,
   .write-index__item {
@@ -2478,38 +2501,92 @@ html.is-clone .dock {
     display: block;
   }
 
+  .home .band .poster__photo {
+    object-position: center 28%;
+  }
+
   .home .band__copy {
-    width: min(100%, 36rem);
-    padding: calc(var(--nav) + 0.9rem) var(--pad) 1.4rem;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.88) 78%, rgba(255, 255, 255, 0.35) 100%);
+    width: 100%;
+    min-height: 100%;
+    align-content: end;
+    gap: 0.4rem;
+    padding: calc(var(--nav) + 0.7rem) var(--pad) calc(1.4rem + env(safe-area-inset-bottom, 0px));
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0.82) 42%,
+      rgba(255, 255, 255, 0.96) 100%
+    );
+  }
+
+  .home .band__title {
+    font-size: clamp(2.6rem, 13vw, 3.8rem);
+    max-width: 11ch;
+    overflow-wrap: break-word;
   }
 
   .home .band .band__line {
-    font-size: var(--lede);
+    font-size: clamp(1.05rem, 4.2vw, 1.25rem);
     margin: 0.1rem 0 0.15rem;
-    max-width: 26ch;
+    max-width: 22ch;
   }
 
   .home .band .band__dek {
     font-size: var(--text-sm);
-    max-width: 40ch;
+    max-width: 34ch;
+    overflow-wrap: break-word;
     display: -webkit-box;
-    -webkit-line-clamp: 4;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+
+  .home__else a {
+    min-height: 0;
+    padding: 1.5rem var(--pad);
   }
 
   .home__else a + a {
     border-left: 0;
   }
 
+  .home__else span {
+    font-size: clamp(2.4rem, 12vw, 3.4rem);
+  }
+
   .lab__list li:nth-child(even) .lab-card {
     margin-top: 0;
+  }
+
+  .lab-card,
+  .write-card {
+    min-height: 0;
+  }
+
+  .case,
+  .lab,
+  .write-index,
+  .missing,
+  .proj-index {
+    padding-top: 1.15rem;
+    padding-bottom: 3.25rem;
+  }
+
+  .case__figure .poster__photo,
+  .proj-row .poster__photo {
+    aspect-ratio: 4 / 3;
   }
 
   .case__facts {
     grid-template-columns: 1fr;
     gap: 0.75rem;
+  }
+
+  .case__head h1,
+  .proj-index h1,
+  .lab h1,
+  .write-index h1 {
+    word-break: break-word;
   }
 
   .facts {
@@ -2518,11 +2595,160 @@ html.is-clone .dock {
 
   .lab__list h2,
   .lab-card > p:nth-of-type(2) {
-    padding-right: 4.4rem;
+    padding-right: 0;
+  }
+
+  .try {
+    padding: 1.15rem 1rem 1.25rem;
+    margin-top: 2.2rem;
+  }
+
+  .try__intro h2 {
+    font-size: clamp(1.6rem, 8vw, 2.2rem);
+  }
+
+  .widget {
+    max-width: none;
+  }
+
+  .widget__panel {
+    padding: 1rem;
+  }
+
+  .write-index__top {
+    gap: 1.25rem;
+    margin-bottom: 1.4rem;
+    padding-bottom: 1.2rem;
+    align-items: stretch;
+  }
+
+  .write-index__item {
+    gap: 0.35rem 0;
+    padding: 1.25rem 0;
+  }
+
+  .write-index__meta {
+    margin: 0 0 0.2rem;
+  }
+
+  .write-index__copy {
+    max-width: none;
+  }
+
+  .write-index__item strong {
+    font-size: clamp(1.3rem, 6vw, 1.7rem);
+  }
+
+  .article,
+  .lab-item,
+  .lab-play {
+    padding-top: 1.3rem;
+    padding-bottom: 3.25rem;
+  }
+
+  .article h1 {
+    font-size: clamp(1.85rem, 8.5vw, 2.6rem);
+  }
+
+  .proj-row {
+    gap: 1rem;
+    padding: 1.6rem 0;
+  }
+
+  .dock {
+    right: max(var(--pad), env(safe-area-inset-right, 0px));
+    bottom: max(0.85rem, env(safe-area-inset-bottom, 0px));
+  }
+
+  .dock__panel {
+    width: min(100vw - 2 * var(--pad), 24rem);
+    height: min(32rem, calc(100dvh - 7rem - env(safe-area-inset-bottom, 0px)));
+    padding: 0.8rem 0.85rem 0.85rem;
+  }
+
+  .dock__toggle {
+    min-width: 3.8rem;
+    min-height: 3.8rem;
+  }
+
+  .clone {
+    padding: 0.7rem var(--pad) max(0.85rem, env(safe-area-inset-bottom, 0px));
+    gap: 0.5rem;
+  }
+
+  .clone__bar,
+  .clone__stage,
+  .clone .composer {
+    width: 100%;
+  }
+
+  .composer {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.5rem;
+  }
+
+  .composer .btn {
+    padding: 0.75rem 0.9rem;
+  }
+
+  .chips {
+    gap: 0.45rem;
+  }
+
+  .chips button {
+    padding: 0.55rem 0.7rem;
+    font-size: 0.9rem;
   }
 
   .colophon {
     flex-direction: column;
+    gap: 0.45rem;
+    padding: 1.1rem var(--pad) calc(5.8rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .nextproj {
+    margin-top: 2.2rem;
+  }
+
+  .msg--user {
+    max-width: min(100%, 28rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .home .band__title {
+    font-size: clamp(2.35rem, 14vw, 3.1rem);
+  }
+
+  .home .band .band__dek {
+    -webkit-line-clamp: 2;
+  }
+
+  .nav__links a {
+    font-size: clamp(2.35rem, 13vw, 3.4rem);
+  }
+
+  .dock__panel {
+    position: fixed;
+    left: var(--pad);
+    right: var(--pad);
+    bottom: calc(4.7rem + env(safe-area-inset-bottom, 0px));
+    width: auto;
+    height: min(70dvh, calc(100dvh - 8.5rem));
+  }
+
+  .lab-card,
+  .meals article,
+  .need-grid article,
+  .rank-list li {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .segment button {
+    flex: 1 1 auto;
+    text-align: center;
+    padding-inline: 0.55rem;
   }
 }
 
@@ -2913,15 +3139,6 @@ html.is-clone .dock {
 .proj-row .textlink {
   display: inline-block;
   margin-top: 1rem;
-}
-
-@media (max-width: 860px) {
-  .widget__split,
-  .need-grid,
-  .meals,
-  .proj-row {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
