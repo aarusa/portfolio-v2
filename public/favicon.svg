@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Arusha">
+  <rect width="32" height="32" fill="#141414"/>
+  <path
+    fill="#ffffff"
+    fill-rule="evenodd"
+    d="M16 7 24 25h-3.5l-1.45-3.5h-6.1L11.5 25H8L16 7Zm-2.05 11.25h4.1L16 13.4l-2.05 4.85Z"
+  />
+  <rect x="22.5" y="7" width="3" height="3" fill="#ff3c00"/>
+</svg>
